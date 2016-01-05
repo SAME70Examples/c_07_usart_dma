@@ -5,6 +5,7 @@
 #include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
 #include "os_usart_same70.h"
 #include "os_serial_stdio.h"
+#include "dma_same70.h"
 
 /*----------------------------------------------------------------------------
  *      Thread 1 'Thread_Name': Led blinker
@@ -41,20 +42,20 @@ int main(){
 	os_usart1_init(9600);
 	button_init();
 	led_init();
+	dma_init();
 	os_serial_init();
 	//Initialize os objects
 	Thread1_init();
 	//Start kernel and thread switching
 	osKernelStart();
 	//User application
-	char myBuffer[80];
-	int lineCounter = 1;
-
+	char myBuffer[] = "Hello World!\n";
 	os_usart1_puts("System ready!\n");
 
 	while(1){
-		os_usart1_gets(myBuffer);
-		os_serial_printf(os_usart1_puts,">>%s\n",myBuffer);
-		lineCounter++;
+		delay_ms(500);
+		dma_usart1_xfer(myBuffer, sizeof(myBuffer)-1);
+		delay_ms(500);
+		os_serial_printf(os_usart1_puts,"Other stuff\n");
 	}
 }

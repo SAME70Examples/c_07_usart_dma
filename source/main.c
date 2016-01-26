@@ -24,38 +24,38 @@ int Thread1_init(void){
 
 void Thread1(void const *argument) {
   while(1){
-	//TODO
-	led_setState(LED_ON);
-	osDelay(500);
-	led_setState(LED_OFF);
-	osDelay(500);
+    //TODO
+    led_setState(LED_ON);
+    osDelay(500);
+    led_setState(LED_OFF);
+    osDelay(500);
   }
 }
 
 int main(){
-	//PreKernelConfigration
-	SystemCoreClockUpdate();
-	watchdogs_disable_all();
-	//Initialize kernel
-	osKernelInitialize();
-	//Initialized hardware
-	os_usart1_init(9600);
-	button_init();
-	led_init();
-	dma_init();
-	os_serial_init();
-	//Initialize os objects
-	Thread1_init();
-	//Start kernel and thread switching
-	osKernelStart();
-	//User application
-	char myBuffer[] = "Hello World!\n";
-	os_usart1_puts("System ready!\n");
+    //PreKernelConfigration
+    SystemCoreClockUpdate();
+    watchdogs_disable_all();
+    //Initialize kernel
+    osKernelInitialize();
+    //Initialized hardware
+    os_usart1_init(9600);
+    button_init();
+    led_init();
+    dma_init();
+    os_serial_init();
+    //Initialize os objects
+    Thread1_init();
+    //Start kernel and thread switching
+    osKernelStart();
+    //User application
+    char myBuffer[] = "Hello World!\n";
+    os_usart1_puts("System ready!\n");
 
-	while(1){
-		delay_ms(500);
-		dma_usart1_xfer(myBuffer, sizeof(myBuffer)-1);
-		delay_ms(500);
-		os_serial_printf(os_usart1_puts,"Other stuff\n");
-	}
+    while(1){
+        delay_ms(500);
+        dma_usart1_xfer(myBuffer, sizeof(myBuffer)-1);
+        delay_ms(500);
+        os_serial_printf(os_usart1_puts,"Other stuff\n");
+    }
 }
